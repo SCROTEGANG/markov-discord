@@ -553,26 +553,26 @@ async function generateResponse(
       tts,
       allowedMentions: { repliedUser: false, parse: [] },
     };
-    const attachmentUrls = response.refs
-      .filter((ref) => ref.custom && 'attachments' in ref.custom)
-      .flatMap((ref) => (ref.custom as MarkovDataCustom).attachments);
-    if (attachmentUrls.length > 0) {
-      const randomRefAttachment = getRandomElement(attachmentUrls);
-      messageOpts.files = [randomRefAttachment];
-    } else {
-      const randomMessage = await MarkovInputData.createQueryBuilder<
-        MarkovInputData<MarkovDataCustom>
-      >('input')
-        .leftJoinAndSelect('input.markov', 'markov')
-        .where({ markov: markov.db })
-        .orderBy('RANDOM()')
-        .limit(1)
-        .getOne();
-      const randomMessageAttachmentUrls = randomMessage?.custom?.attachments;
-      if (randomMessageAttachmentUrls?.length) {
-        messageOpts.files = [{ attachment: getRandomElement(randomMessageAttachmentUrls) }];
-      }
-    }
+    // const attachmentUrls = response.refs
+    //   .filter((ref) => ref.custom && 'attachments' in ref.custom)
+    //   .flatMap((ref) => (ref.custom as MarkovDataCustom).attachments);
+    // if (attachmentUrls.length > 0) {
+    //   const randomRefAttachment = getRandomElement(attachmentUrls);
+    //   messageOpts.files = [randomRefAttachment];
+    // } else {
+    //   const randomMessage = await MarkovInputData.createQueryBuilder<
+    //     MarkovInputData<MarkovDataCustom>
+    //   >('input')
+    //     .leftJoinAndSelect('input.markov', 'markov')
+    //     .where({ markov: markov.db })
+    //     .orderBy('RANDOM()')
+    //     .limit(1)
+    //     .getOne();
+    //   const randomMessageAttachmentUrls = randomMessage?.custom?.attachments;
+    //   if (randomMessageAttachmentUrls?.length) {
+    //     messageOpts.files = [{ attachment: getRandomElement(randomMessageAttachmentUrls) }];
+    //   }
+    // }
     messageOpts.content = response.string;
 
     const responseMessages: GenerateResponse = {
